@@ -16,7 +16,7 @@
 	class:card-hover={!inputed}
 	class:disabled={inputed}
 >
-	<iconify-icon width="2rem" icon={iconId} class="iconify" data-icon={iconId} data-inline="false"
+	<iconify-icon width="1.5rem" icon={iconId} class="iconify" data-icon={iconId} data-inline="false"
 	></iconify-icon>
 	<h4 class="h4">{service}</h4>
 	{#if inputed}
