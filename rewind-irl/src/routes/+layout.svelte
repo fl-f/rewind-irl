@@ -1,6 +1,8 @@
 <script lang="ts">
 	import '../app.postcss';
-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+	import { AppShell, AppBar, Modal } from '@skeletonlabs/skeleton';
+
+	import 'iconify-icon';
 
 	// Highlight JS
 	import hljs from 'highlight.js/lib/core';
@@ -21,15 +23,21 @@
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+
+	import { initializeStores } from '@skeletonlabs/skeleton';
+
+	initializeStores();
 </script>
 
 <!-- App Shell -->
+<Modal />
+
 <AppShell>
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
-		<AppBar>
+		<AppBar background="transparent">
 			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Skeleton</strong>
+				<strong class="text-xl uppercase">Rewind RL</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<a
