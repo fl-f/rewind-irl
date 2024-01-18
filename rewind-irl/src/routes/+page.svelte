@@ -121,13 +121,13 @@
 			bind:value={service_connections.dropbox}
 		/>
 
-		<ServiceConnector onClick={connectDiscord} service="Discord" iconId="mdi:discord"
+		<ServiceConnector onClick={connectDiscord} service="Discord" iconId="mdi:discord" inputed={service_connections.discord != ''}
 		></ServiceConnector>
-		<ServiceConnector onClick={connectGoogle} service="Google" iconId="mdi:google"
+		<ServiceConnector onClick={connectGoogle} service="Google" iconId="mdi:google" inputed={service_connections.google != ''}
 		></ServiceConnector>
-		<ServiceConnector onClick={connectPhotos} service="Photos" iconId="mdi:camera"
+		<ServiceConnector onClick={connectPhotos} service="Photos" iconId="mdi:camera" inputed={service_connections.photos != ''}
 		></ServiceConnector>
-		<ServiceConnector onClick={connectInstagram} service="Instagram" iconId="mdi:instagram"
+		<ServiceConnector onClick={connectInstagram} service="Instagram" iconId="mdi:instagram" inputed={service_connections.instagram != ''}
 		></ServiceConnector>
 
 		<button
@@ -144,7 +144,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		height: 100vh;
+
 	}
 
 	.service-connection {

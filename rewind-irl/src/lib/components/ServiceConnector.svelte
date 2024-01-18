@@ -11,7 +11,7 @@
 </script>
 
 <button
-	class="card service-button h-16"
+	class="card service-button h-16 rounded-lg"
 	on:click={onClick}
 	class:card-hover={!inputed}
 	class:disabled={inputed}
