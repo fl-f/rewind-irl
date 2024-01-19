@@ -4,7 +4,7 @@
 	import { getModalStore } from '@skeletonlabs/skeleton';
 	import type { ModalSettings } from '@skeletonlabs/skeleton';
 
-	let service_connections:  = {
+	let service_connections = {
 		connected: false,
 		dropbox: '',
 		discord: '',

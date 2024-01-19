@@ -4,6 +4,8 @@
 	import { getAccount, init, listFolder } from '$lib/dropbox';
 	import { blankRewind, type Rewind } from '$lib/rewind';
 	import { DiscordPackage } from '$lib/discord';
+	import type { files } from 'dropbox';
+	import { PhotosFolder } from '$lib/photos';
 
 	let tokens = [];
 	let links = [];
@@ -25,7 +27,7 @@
 	let rewind: Rewind = blankRewind(2023);
 
 	async function getAppFolder(root: string, appName: string, intendedName: string) {
-		return listFolder('')
+		return listFolder(root)
 			.then((files) => {
 				for (const file of files.result.entries) {
 					if (
@@ -35,6 +37,7 @@
 						return file;
 					}
 				}
+
 			})
 			.catch((error) => {
 				console.log(error);
@@ -56,11 +59,17 @@
 
 			init(serviceConnections.dropbox);
 
-			let folder = await getRewindFolder();
+			let folder = await getRewindFolder()
 
 			if (folder) {
-				console.log(folder);
-				rewind.discord = await DiscordPackage.getDiscordRewindData(serviceConnections.discord);
+
+				//rewind.discord = await DiscordPackage.getDiscordRewindData(
+				//	await getAppFolder(folder.path_lower as string, 'Discord', 'discord') as files.FolderMetadataReference
+				//);
+
+				rewind.photos = await PhotosFolder.getPhotosRewindData(
+					await getAppFolder(folder.path_lower as string, 'Photos', 'photos') as files.FolderMetadataReference
+				);
 			} else {
 				throw new Error('RewindIRL folder not found');
 			}
