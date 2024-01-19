@@ -47,6 +47,7 @@
   "dependencies": {
     "@floating-ui/dom": "1.5.4",
     "dropbox": "^10.34.0",
+    "gsap": "^3.12.5",
     "highlight.js": "11.9.0",
     "iconify-icon": "^1.0.8"
   }

@@ -4,7 +4,7 @@
 	import { getModalStore } from '@skeletonlabs/skeleton';
 	import type { ModalSettings } from '@skeletonlabs/skeleton';
 
-	let service_connections = {
+	let service_connections:  = {
 		connected: false,
 		dropbox: '',
 		discord: '',
@@ -110,7 +110,7 @@
 	}
 </script>
 
-<div class="main dark">
+<div class="main dark h-screen">
 	<div class="card service-connection dark">
 		<h3 class="h3 card-header">Connect Services</h3>
 		<p class="card-body">Connect your services to generate your REWIND.</p>
@@ -121,13 +121,29 @@
 			bind:value={service_connections.dropbox}
 		/>
 
-		<ServiceConnector onClick={connectDiscord} service="Discord" iconId="mdi:discord" inputed={service_connections.discord != ''}
+		<ServiceConnector
+			onClick={connectDiscord}
+			service="Discord"
+			iconId="mdi:discord"
+			inputed={service_connections.discord != ''}
 		></ServiceConnector>
-		<ServiceConnector onClick={connectGoogle} service="Google" iconId="mdi:google" inputed={service_connections.google != ''}
+		<ServiceConnector
+			onClick={connectGoogle}
+			service="Google"
+			iconId="mdi:google"
+			inputed={service_connections.google != ''}
 		></ServiceConnector>
-		<ServiceConnector onClick={connectPhotos} service="Photos" iconId="mdi:camera" inputed={service_connections.photos != ''}
+		<ServiceConnector
+			onClick={connectPhotos}
+			service="Photos"
+			iconId="mdi:camera"
+			inputed={service_connections.photos != ''}
 		></ServiceConnector>
-		<ServiceConnector onClick={connectInstagram} service="Instagram" iconId="mdi:instagram" inputed={service_connections.instagram != ''}
+		<ServiceConnector
+			onClick={connectInstagram}
+			service="Instagram"
+			iconId="mdi:instagram"
+			inputed={service_connections.instagram != ''}
 		></ServiceConnector>
 
 		<button
@@ -144,7 +160,6 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-
 	}
 
 	.service-connection {

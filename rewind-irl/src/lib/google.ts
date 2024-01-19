@@ -1,16 +1,7 @@
+import type { YoutubeRewindData } from "./rewind";
 
-class GoogleTakeout {
-    path: String;
-
-    constructor(path: String) {
-        this.path = path;
-    }
-
-
-    getYoutubeRewindData() : YoutubeRewindData | null {
+export class GoogleTakeout {
+    static getYoutubeRewindData(folder: string) : YoutubeRewindData | null {
         return null
     }
-
-
-
 }

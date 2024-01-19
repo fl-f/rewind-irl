@@ -33,15 +33,6 @@
 <Modal />
 
 <AppShell>
-	<svelte:fragment slot="header">
-		<!-- App Bar -->
-		<AppBar background="transparent">
-			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Rewind RL</strong>
-			</svelte:fragment>
-			
-		</AppBar>
-	</svelte:fragment>
 	<!-- Page Route Content -->
 	<slot />
 </AppShell>

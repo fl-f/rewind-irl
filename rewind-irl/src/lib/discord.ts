@@ -1,13 +1,10 @@
+import type { DiscordRewindData } from "./rewind";
 
-class DiscordPackage {
-    path: String;
-
-    constructor(path: String) {
-        this.path = path;
-    }
+export class DiscordPackage {
 
 
-    getDiscordRewindData() : DiscordRewindData | null {
+
+    static getDiscordRewindData(folder: string) : DiscordRewindData | null {
         return null
     }
 

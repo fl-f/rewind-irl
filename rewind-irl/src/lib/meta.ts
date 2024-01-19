@@ -1,12 +1,9 @@
-class MetaDataDownload {
-    path: String;
+import type { InstagramRewindData, YoutubeRewindData } from "./rewind";
 
-    constructor(path: String) {
-        this.path = path;
-    }
+export class MetaDataDownload {
 
-
-    getInstagramData() : InstagramRewindData | null {
+    
+    static getInstagramRewindData(rootFolder: string, folder: string) : InstagramRewindData | null {
         return null
     }
 
