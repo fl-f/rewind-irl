@@ -1,48 +1,53 @@
 
 export interface DiscordRewindData {
-    year: number;
-    channels : Array<{
-        name: string,
-        thumbnail: string,
-        messagesSent: number,
-    }>,
-    friends : Array<{
-        name: string,
-        avatar: string,
-        messagesSent: number,
-    }>,
-    messagesSent: number,
-    messagesReceived: number,
-    reactionsSent: number,
+
+    channels : {
+        number: number,
+        channels: {
+            name: string,
+            thumbnail: string,
+        }[]
+    }
+    messages: {
+        number: number,
+        histogram: {
+            number: number,
+            histogram: {
+                frequency: number,
+                word: string
+            }[],
+        },
+        
+    },
+
 
 }
 
 export interface PhotosRewindData {
-    year: number;
-    photos: Array<{
+    photos: {
         name: string,
         file: string,
         date: Date,
-    }>,
+    }[],
 
-    videos: Array<{
+    videos: {
         name: string,
         file: string,
         date: Date,
-    }>,
+    }[],
 }
 
 
 export interface YoutubeRewindData {
-    year: number;
+
     videos_watched: {
         amount: number,
         watch_time: number,
         comments: number,
         likes: number,
-        sample: Array<{
+        sample: {
             url: string,
-        }>
+        }[]
 
     }
 
@@ -59,15 +64,11 @@ export interface YoutubeRewindData {
 
 
 export interface InstagramRewindData {
-    year: number;
-    posts: Array<{
-        name: string,
+
+    posts: {
         file: string,
         date: Date,
-        likes: number,
-        comments: number,
-        link: string
-    }>,
+    }[],
 
 }
 
@@ -75,7 +76,7 @@ export interface InstagramRewindData {
 
 export interface Rewind {
 
-    year: number;
+
     discord: DiscordRewindData | null;
     youtube: YoutubeRewindData | null;
     photos: PhotosRewindData | null;
@@ -94,9 +95,8 @@ export interface Rewind {
     
 }
 
-export function blankRewind(year: number): Rewind {
+export function blankRewind(): Rewind {
     return {
-        year: year,
         discord: null,
         youtube: null,
         photos: null,

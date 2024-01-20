@@ -11,23 +11,30 @@ interface photo {
 export class PhotosFolder {
 
     
-    private static process_photos(path: string) : photo[] {
+    private static async process_photos(path: string) : Promise<photo[]> {
 
 
-        return getFilteredFiles(path, (entry) => entry.name.endsWith('.jpg') || entry.name.endsWith('.png') || entry.name.endsWith('.jpeg')).then((files) => {
-            files.forEach((file) => {
-                
-            });
+        return getFilteredFiles(path, (entry) => entry.name.endsWith('.jpg') || entry.name.endsWith('.png') || entry.name.endsWith('.jpeg')).then(async (files) => {
+            // return Promise.all(files.map(async (file) => {
+            //     return download(file.path_lower as string).then((file) => {
+            //         return {
+            //                 file: URL.createObjectURL(file.result.fileBlob),
+            //                 name: file.result.name,
+            //                 date: new Date(file.result.media_info.metadata.time_taken),
+            //             };
+            //     });
+            // }));
 
-            download(files[0].path_lower as string).then((file) => {
-                [
-                    {
-                        file: URL.createObjectURL(file.result.fileBlob),
-                        name: file.result.name,
-                        date: new Date(file.result.client_modified),
-                    }
-                ];
-            });
+            
+            return download(files[0].path_lower as string).then((file) => {
+                    console.log(file)
+                    return [{
+                             file: URL.createObjectURL(file.result.fileBlob),
+                             name: file.result.name,
+                             date: new Date(file.result.media_info.metadata.time_taken),
+                         }];
+                 });
+            
         });
 
         return [];
@@ -35,12 +42,14 @@ export class PhotosFolder {
 
 
 
-    static getPhotosRewindData(folder: files.FolderMetadataReference | null) : PhotosRewindData | null {
+    static async getPhotosRewindData(folder: files.FolderMetadataReference | null) : PhotosRewindData | null {
         if (!folder) return null;
         
-        const photos = PhotosFolder.process_photos(folder.path_lower as string);
-     
-        return null;
+        const photos = await PhotosFolder.process_photos(folder.path_lower as string);
+        return {
+            photos: photos,
+            videos: [],
+        }
     }
 
 
