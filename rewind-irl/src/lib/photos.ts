@@ -15,25 +15,18 @@ export class PhotosFolder {
 
 
         return getFilteredFiles(path, (entry) => entry.name.endsWith('.jpg') || entry.name.endsWith('.png') || entry.name.endsWith('.jpeg')).then(async (files) => {
-            // return Promise.all(files.map(async (file) => {
-            //     return download(file.path_lower as string).then((file) => {
-            //         return {
-            //                 file: URL.createObjectURL(file.result.fileBlob),
-            //                 name: file.result.name,
-            //                 date: new Date(file.result.media_info.metadata.time_taken),
-            //             };
-            //     });
-            // }));
+            return Promise.all(files.map(async (file) => {
+                return download(file.path_lower as string).then((file) => {
+                    return {
+                            file: URL.createObjectURL(file.result.fileBlob),
+                            name: file.result.name,
+                            date: new Date(file.result.media_info.metadata.time_taken),
+                        };
+                });
+            }));
 
             
-            return download(files[0].path_lower as string).then((file) => {
-                    console.log(file)
-                    return [{
-                             file: URL.createObjectURL(file.result.fileBlob),
-                             name: file.result.name,
-                             date: new Date(file.result.media_info.metadata.time_taken),
-                         }];
-                 });
+            
             
         });
 

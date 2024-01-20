@@ -40,23 +40,13 @@ export interface PhotosRewindData {
 
 export interface YoutubeRewindData {
 
-    videos_watched: {
+
+    subscriptions: {
         amount: number,
-        watch_time: number,
-        comments: number,
-        likes: number,
-        sample: {
+        subscriptions: {
+            name: string,
             url: string,
         }[]
-
-    }
-
-    channels_subscribed : {
-        amount: number,
-        channels: Array<{
-            name: string,
-            thumbnail: string,
-        }>
     }
 
 
@@ -69,6 +59,7 @@ export interface InstagramRewindData {
         file: string,
         date: Date,
     }[],
+    profile_picture: string,
 
 }
 

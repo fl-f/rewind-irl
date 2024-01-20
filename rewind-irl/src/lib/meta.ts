@@ -17,13 +17,21 @@ export class MetaDataDownload {
             return Promise.all(files.map(async (file) => {
 
                     return download(file.path_lower as string).then((file) => {
-                        console.log(MetaDataDownload.get_date_from_path(file.result.path_display as string))
+                        
                         return {
                                 file: URL.createObjectURL(file.result.fileBlob),
                                 date: MetaDataDownload.get_date_from_path(file.result.path_display as string),
                             };
                     });
                 }));
+        });
+    }
+
+    private static async getProfilePicture(path: string) : Promise<string> {
+        return getFilteredFiles(path, (entry) => entry.name.endsWith('.jpg') || entry.name.endsWith('.png') || entry.name.endsWith('.jpeg')).then(async (files) => {
+            return download(files[0].path_lower as string).then((file) => {
+                    return URL.createObjectURL(file.result.fileBlob);
+                });
         });
     }
     
@@ -34,6 +42,7 @@ export class MetaDataDownload {
         const posts = MetaDataDownload.getPosts(path.join((folder.path_lower as string), "/media/posts"));
         return {
             posts: await posts,
+            profile_picture: await MetaDataDownload.getProfilePicture(path.join((folder.path_lower as string), "/media/other")),
         }
     }
 

@@ -7,9 +7,12 @@
 	import type { files } from 'dropbox';
 	import { PhotosFolder } from '$lib/photos';
 	import { MetaDataDownload } from '$lib/meta';
+	import { GoogleTakeout } from '$lib/google';
 
 	let tokens = [];
 	let links = [];
+	let loading = true;
+	let popup = true;
 
 	async function getRewindFolder() {
 		return listFolder('')
@@ -45,6 +48,7 @@
 	}
 
 	onMount(async () => {
+		loading = true;
 		// Retrieve data from session storage
 		const sessionData = sessionStorage.getItem('service_connections');
 		if (sessionData) {
@@ -62,10 +66,6 @@
 			let folder = await getRewindFolder();
 
 			if (folder) {
-				//rewind.discord = await DiscordPackage.getDiscordRewindData(
-				//	await getAppFolder(folder.path_lower as string, 'Discord', 'discord') as files.FolderMetadataReference
-				//);
-
 				rewind.photos = await PhotosFolder.getPhotosRewindData(
 					(await getAppFolder(
 						folder.path_lower as string,
@@ -90,10 +90,19 @@
 					)) as files.FolderMetadataReference
 				);
 
-				console.log(rewind.discord);
+				rewind.youtube = await GoogleTakeout.getYoutubeRewindData(
+					(await getAppFolder(
+						folder.path_lower as string,
+						'Google',
+						'google'
+					)) as files.FolderMetadataReference
+				);
+
+				console.log(rewind);
 			} else {
 				throw new Error('RewindIRL folder not found');
 			}
+			loading = false;
 		}
 	});
 </script>
@@ -101,6 +110,31 @@
 <!-- Your component's markup goes here -->
 
 <div>
+	{#if popup}
+		<div
+			class="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center z-50"
+			style="background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px);"
+		>
+			<h2 class="text-5xl font-bold text-center">Generating Your Rewind!</h2>
+			<a
+				href="http://localhost:8080/"
+				target="_blank"
+				class="btn text-3xl font-bold p-3 rounded-lg bg-purple-700 mt-5"
+			>
+				Play Pong While You Wait!
+			</a>
+			<button
+				class="btn bg-gradient-to-r from-purple-300 to-pink-200 text-transparent bg-clip-text text-3xl font-bold p-5 rounded-lg mt-10"
+				disabled={loading}
+				on:click={() => {
+					popup = false;
+				}}
+			>
+				Continue
+			</button>
+		</div>
+	{/if}
+
 	<div class="w-full flex flex-col items-center justify-center h-screen gap-10">
 		<div
 			use:animation={{
@@ -155,8 +189,9 @@
 						type: 'to',
 						yoyo: true,
 						duration: 1.5,
-						ease: 'easeInOut',
+						ease: 'power3.out',
 						y: (i) => (i % 2 === 0 ? -60 : 20),
+						x: (i) => (i % 2 === 0 ? -3 : 3),
 						opacity: 1.0,
 						stagger: 0.2,
 						loop: true,
@@ -164,7 +199,7 @@
 					}}
 				>
 					{#each rewind.photos.photos as photo}
-						<div class="flex flex-col shrink-0 text-center gap-5">
+						<div class="flex flex-col shrink-0 text-center gap-5 mb-16">
 							<img
 								class="rounded-lg h-80 w-80 aspect-square scroll-image"
 								src={photo.file}
@@ -188,7 +223,7 @@
 	<div class=" flex flex-col items-center justify-center">
 		{#if rewind.discord}
 			<div class="flex flex-col items-center justify-center">
-				<h2 class="text-7xl font-bold text-center discord-section mb-32">Discord</h2>
+				<h2 class="text-7xl font-bold text-center discord-section mb-24">Discord</h2>
 				<div class="flex flex-col items-center justify-center gap-5 w-full">
 					<div class="flex flex-row items-center jusitfy-center gap-5">
 						<div class="card p-5 grow-1">
@@ -204,6 +239,7 @@
 								<h3 class="h3">Sent in Discord servers and DMs</h3>
 							</div>
 						</div>
+
 						<div class="card p-5 grow-1">
 							<div class="card-header text-center">
 								<h1 class="h1">
@@ -231,6 +267,7 @@
 							</div>
 						</div>
 					</div>
+
 					<h2 class="h2">Your Most Common Words</h2>
 					<div
 						class="flex flex-row items-center justify-center gap-5"
@@ -265,6 +302,30 @@
 						{/each}
 					</div>
 					<h2 class="h2">Your Servers</h2>
+
+					<div
+						class="flex flex-row items-center justify-end gap-5 h-32"
+						use:animation={{
+							scrollTrigger: null,
+							children: true,
+							type: 'to',
+
+							duration: 10,
+							ease: 'linear',
+							x: -300,
+							opacity: 1.0,
+
+							repeat: -1
+						}}
+					>
+						{#each rewind.discord.channels.channels as channel}
+							<div class="card p-1 flex flex-col shrink-0 text-center gap-5 p-3">
+								<h1 class="h1">
+									{channel.name}
+								</h1>
+							</div>
+						{/each}
+					</div>
 				</div>
 			</div>
 		{/if}
@@ -273,8 +334,16 @@
 	<div class=" flex flex-col items-center justify-center">
 		{#if rewind.instagram}
 			<div class="flex flex-col items-center justify-center">
-				<h2 class="text-7xl font-bold text-center discord-section mb-32">Instagram</h2>
-
+				<div class="h-56 flex flex-row items-center justify-center w-full">
+					<div class="flex flex-row items-center justify-center gap-5">
+						<h2 class="text-7xl font-bold text-center discord-section mb-5">Instagram</h2>
+						<img
+							class="aspect-square rounded-full w-24 h-24 border-4 border-white -translate-y-3"
+							src={rewind.instagram.profile_picture}
+							alt=""
+						/>
+					</div>
+				</div>
 				<div
 					class="flex flex-row items-end justify-end gap-5"
 					use:animation={{
@@ -305,6 +374,56 @@
 									})}
 								{/if}
 							</h3>
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/if}
+	</div>
+
+	<div class=" flex flex-col items-center justify-center">
+		{#if rewind.youtube}
+			<div class="flex flex-col items-center justify-center">
+				<div class="h-56 flex flex-row items-center justify-center w-full">
+					<div class="flex flex-row items-center justify-center gap-5">
+						<h2 class="text-7xl font-bold text-center discord-section mb-5">Youtube</h2>
+					</div>
+				</div>
+
+				<div class="card p-5 grow-1">
+					<div class="card-header text-center">
+						<h3 class="h3">Subscribed To</h3>
+						<h1 class="h1">
+							<span
+								class="bg-gradient-to-r from-purple-300 to-pink-200 text-transparent bg-clip-text"
+								>{rewind.youtube.subscriptions.amount}</span
+							> Channels
+						</h1>
+					</div>
+					<div class="card-body text-center">
+						<h3 class="h3">On Youtube</h3>
+					</div>
+				</div>
+				<div
+					class="flex flex-row items-center justify-end gap-5 h-32"
+					use:animation={{
+						scrollTrigger: null,
+						children: true,
+						type: 'to',
+
+						duration: 40,
+						ease: 'linear',
+						x: -100,
+						opacity: 1.0,
+
+						repeat: -1
+					}}
+				>
+					{#each rewind.youtube.subscriptions.subscriptions as channel}
+						<div class="card p-1 flex flex-col shrink-0 text-center gap-5 p-3">
+							<a href={channel.url} class="h1">
+								{channel.name}
+							</a>
 						</div>
 					{/each}
 				</div>
